@@ -1,14 +1,11 @@
 # MicroEvent.js
 
-_MicroEvent.js_ is a event emitter library which provides the
-[observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
-It works on node.js and browser. It is a single .js file containing
-a <a href="https://github.com/jeromeetienne/microevent.js/blob/master/microevent.js#L12-31">20 lines class</a>
-(only 321-bytes after minification+gzip).
+_MicroEvent.js_ is a event emitter library which provides the [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
+It works on node.js and browser and also supports RequireJS (AMD).
 
 ## How to Use It
 
-You need a single file [microevent.js](https://github.com/jeromeetienne/microevent.js/raw/master/microevent.js).
+You need a single file [microevent.js](https://github.com/mistic100/microevent.js/blob/master/microevent.js).
 Include it in a webpage via the usual script tag.
 
 ```html
@@ -26,10 +23,6 @@ Now suppose you got a class `Foobar`, and you wish it to support the observer pa
 ```js
 MicroEvent.mixin(Foobar)
 ```
-
-That's it. The repository contains an [example in browser](https://github.com/jeromeetienne/microevent.js/blob/master/examples/example.html)
-and an [example in nodejs](https://github.com/jeromeetienne/microevent.js/blob/master/examples/example.js).
-Both use the same code in different contexts. Let me walk you thru it.
 
 ## Example
 
@@ -60,7 +53,7 @@ var ticker = new Ticker();
 and bind our _tick_ event with its data parameter
 
 ```js
-ticker.bind('tick', function(date) {
+ticker.on('tick', function(date) {
     console.log('notified date', date);
 });
 ```
@@ -72,10 +65,3 @@ notified date Tue, 22 Mar 2011 14:43:41 GMT
 notified date Tue, 22 Mar 2011 14:43:42 GMT
 ...
 ```
-
-## Conclusion
-
-MicroEvent.js is available on github <a href='https://github.com/jeromeetienne/microevent.js'>here</a>
-under <a href='https://github.com/jeromeetienne/microevent.js/blob/master/MIT-LICENSE.txt'>MIT license</a>.
-If you hit bugs, fill issues on github.
-Feel free to fork, modify and have fun with it :)
