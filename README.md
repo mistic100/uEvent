@@ -1,6 +1,7 @@
 # MicroEvent.js
 
 [![Bower version](https://badge.fury.io/bo/microevent-mistic100.svg)](http://badge.fury.io/bo/microevent-mistic100)
+[![npm version](https://badge.fury.io/js/microevent-mistic100.svg)](http://badge.fury.io/js/microevent-mistic100)
 
 _MicroEvent.js_ is a event emitter library which provides the [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
 It works on node.js and browser and also supports RequireJS (AMD).
