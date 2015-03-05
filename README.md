@@ -17,9 +17,10 @@ It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/
 * add `once` method [alinz](https://github.com/alinz/microevent.js/commit/a8293fe9571ea4e609d51ec906d627e64dfb8eba)
 * add `change` method
 * allow to rename methods in the mixin
-* make methods chainable [feross](https://github.com/PeerCDN/microevent.js/commit/617c9a26ed861b812c61eb836b22c0f313292a20)
+* make `on`, `off` and `once` methods chainable [feross](https://github.com/PeerCDN/microevent.js/commit/617c9a26ed861b812c61eb836b22c0f313292a20)
 * fix error in `off` [#27](https://github.com/jeromeetienne/microevent.js/pull/27)
 * fix callback skips when `off` is called from another callback [#10](https://github.com/jeromeetienne/microevent.js/issues/10)
+* integrate **prevent default** and **stop propagation** patterns
 
 ## How to Use It
 
@@ -30,7 +31,7 @@ Include it in a webpage via the usual script tag.
 <script src="microevent.js"></script>
 ```
 
-To include it in a nodejs code isnt much harder
+To include it in a nodejs code isn't much harder
 
 ```js
 var MicroEvent = require('./microevent.js')
@@ -125,6 +126,46 @@ var newVal = obj.change('event', 'Hello world')
 var newVal = obj.change('event', 'Hello world', true, 42)
 ```
 
+## Advanced
+
+MicroEvents integrates two concepts from jQuery : prevent default and stop propagation. This is done via an additional argument transmitted to each `trigger` and/or `change` callback.
+
+### Prevent default
+
+Call `preventDefault()` on this additional object to "mark" the event. After calling `trigger` you get a reference to the Event object and test `isDefaultPrevented()`.
+
+```js
+obj.on('event', function(id, e) {
+  if (id == 0) {
+    e.preventDefault();
+  }
+});
+
+var e = obj.trigger('event', id);
+
+if (!e.isDefaultPrevented()) {
+  // ...
+}
+```
+
+### Stop propagation
+
+Call `stopPropagation()` on the Event object to prevent any further callbacks to be called. Works for `trigger` and `change`.
+
+```js
+obj.on('event', function(val, e) {
+  e.stopPropagation();
+  return val;
+});
+
+obj.on('event', function(val, e) {
+  return 'azerty';
+});
+
+var newVal = obj.change('event', '1234');
+// newVal is still '1234'
+```
+
 ## Example
 
 First we define the class which gonna use MicroEvent.js. This is a ticker, it is
@@ -133,9 +174,9 @@ triggering 'tick' event every second, and add the current date as parameter
 ```js
 var Ticker = function(){
     var self = this;
+    
     setInterval(function(){
         self.trigger('tick', new Date());
-
         console.log(self.change('hello', 'Hello'));
     }, 1000);
 };
