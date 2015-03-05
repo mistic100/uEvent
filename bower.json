@@ -1,6 +1,6 @@
 {
   "name": "microevent-mistic100",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Event emitter micro library",
   "main": "microevent.js",
   "author": [{
@@ -8,6 +8,7 @@
     "homepage": "http://jetienne.com"
   }, {
     "name": "Damien \"Mistic\" Sorel",
+    "email": "contact@git.strangeplanet.fr",
     "homepage": "http://www.strangeplanet.fr"
   }],
   "keywords": ["events", "emitter"],
