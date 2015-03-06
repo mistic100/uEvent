@@ -23,6 +23,12 @@ It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/
 * fix callback skips when `off` is called from another callback [#10](https://github.com/jeromeetienne/microevent.js/issues/10)
 * integrate **prevent default** and **stop propagation** patterns
 
+### Users
+
+* [jQuery QueryBuilder](https://github.com/mistic100/jQuery-QueryBuilder)
+
+_You use MicroEvent in your project ? Just let me know or create a PR :octocat:_
+
 ## How to Use It
 
 You need a single file [microevent.js](https://github.com/mistic100/microevent.js/blob/master/microevent.js).
