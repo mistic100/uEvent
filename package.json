@@ -1,6 +1,6 @@
 {
   "name": "microevent-mistic100",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Event emitter micro library",
   "main": "microevent.js",
   "author": [{

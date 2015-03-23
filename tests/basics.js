@@ -77,6 +77,22 @@ describe('Basic usage', function() {
     });
 });
 
+describe('Separated instances', function() {
+    it('different instances should not share events', function() {
+        var clazz = function(){};
+        MicroEvent.mixin(clazz);
+        var obj1 = new clazz();
+        var obj2 = new clazz();
+        
+        var done = 0;
+        obj1.on('test', function() { done++; });
+        obj1.trigger('test');
+        obj2.trigger('test');
+        
+        assert.equal(done, 1);
+    });
+});
+
 describe('Multiple events', function() {
     it('on', function() {
         var obj = {};

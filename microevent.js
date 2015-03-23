@@ -53,6 +53,8 @@
          * obj.on({ event1: callback1, event2: callback2 })
          */
         on: function (events, fct) {
+            this._events = this._events || {};
+
             if (typeof events === 'object') {
                 for (var event in events) {
                     if (events.hasOwnProperty(event)) {
@@ -85,6 +87,8 @@
          * obj.off()
          */
         off: function (events, fct) {
+            this._events = this._events || {};
+
             if (typeof events === 'object') {
                 for (var event in events) {
                     if (events.hasOwnProperty(event) && (event in this._events)) {
@@ -126,6 +130,8 @@
          * obj.once({ event1: callback1, event2: callback2 })
          */
         once: function (events, fct) {
+            this._once = this._once || {};
+
             if (typeof events === 'object') {
                 for (var event in events) {
                     if (events.hasOwnProperty(event)) {
@@ -158,7 +164,7 @@
 
             args.push(e);
 
-            if (event in this._events) {
+            if (this._events && event in this._events) {
                 for (i=0, l=this._events[event].length; i<l; i++) {
                     this._events[event][i].apply(this, args);
                     if (e.isPropagationStopped()) {
@@ -167,7 +173,7 @@
                 }
             }
 
-            if (event in this._once) {
+            if (this._once && event in this._once) {
                 for (i=0, l=this._once[event].length; i<l; i++) {
                     this._once[event][i].apply(this, args);
                     if (e.isPropagationStopped()) {
@@ -196,7 +202,7 @@
 
             args.push(e);
 
-            if (event in this._events) {
+            if (this._events && event in this._events) {
                 for (i=0, l=this._events[event].length; i<l; i++) {
                     args[0] = value;
                     value = this._events[event][i].apply(this, args);
@@ -233,11 +239,11 @@
 
         Object.defineProperties(typeof obj === 'function' ? obj.prototype : obj, {
             '_events': {
-                value: {},
+                value: null,
                 writable: true
             },
             '_once': {
-                value: {},
+                value: null,
                 writable: true
             }
         });
