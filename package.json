@@ -22,11 +22,17 @@
     "url": "https://github.com/mistic100/microevent.js/issues"
   },
   "devDependencies": {
-      "grunt-contrib-uglify": "~0.8.0",
-      "grunt-contrib-jshint": "~0.11.0",
-      "grunt-mocha-test": "~0.12.0"
+    "grunt-contrib-uglify": "~0.8.0",
+    "grunt-contrib-jshint": "~0.11.0",
+    "blanket": "^1.1.6",
+    "grunt-mocha-cov": "^0.4.0"
   },
   "scripts": {
-    "test": "grunt test --force"
+    "test": "grunt test"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "microevent.js"
+    }
   }
 }

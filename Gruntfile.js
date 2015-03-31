@@ -36,18 +36,26 @@ module.exports = function(grunt) {
         },
 
         // mocha tests
-        mochaTest: {
-            unit: {
-                src: [
-                    'tests/*.js'
-                ]
+        mochacov: {
+            coverage: {
+                options: {
+                    coveralls: true
+                }
+            },
+            test: {
+                options: {
+                    reporter: 'spec'
+                }
+            },
+            options: {
+                files: 'tests/*.js'
             }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-mocha-cov');
 
     grunt.registerTask('default', [
         'uglify'
@@ -55,6 +63,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', [
         'jshint',
-        'mochaTest'
+        'mochacov:test'
+    ]);
+
+    grunt.registerTask('test-travis', [
+        'jshint',
+        'mochacov:coverage'
     ]);
 };
