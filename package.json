@@ -32,7 +32,8 @@
   },
   "config": {
     "blanket": {
-      "pattern": "microevent.js"
+      "pattern": ["microevent.js"],
+      "data-cover-never": ["node_modules", "tests"]
     }
   }
 }
