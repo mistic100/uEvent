@@ -20,5 +20,13 @@
   },
   "bugs": {
     "url": "https://github.com/mistic100/microevent.js/issues"
-  }
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests",
+    "package.json",
+    "Gruntfile.js"
+  ]
 }
