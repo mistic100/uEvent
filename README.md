@@ -1,10 +1,10 @@
-# MicroEvent.js
+# uEvent
 
-[![Bower version](https://badge.fury.io/bo/microevent-mistic100.svg)](http://badge.fury.io/bo/microevent-mistic100)
-[![npm version](https://badge.fury.io/js/microevent-mistic100.svg)](http://badge.fury.io/js/microevent-mistic100)
-[![Build Status](https://travis-ci.org/mistic100/microevent.js.svg?branch=master)](https://travis-ci.org/mistic100/microevent.js)
+[![Bower version](https://img.shields.io/bower/v/uevent.svg?style=flat-square)](https://github.com/mistic100/uEvent)
+[![NPM version](https://img.shields.io/npm/v/uevent.svg?style=flat-square)](https://www.npmjs.com/package/uevent)
+[![Build Status](https://travis-ci.org/mistic100/uEvent.svg?branch=master)](https://travis-ci.org/mistic100/uEvent)
 
-_MicroEvent.js_ is a event emitter library which provides the [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
+_uEvent_ is a event emitter library which provides the [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
 It works on node.js and browser and also supports RequireJS (AMD).
 
 It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/microevent.js) with the changes of few other forks and custom changes.
@@ -26,29 +26,29 @@ It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/
 
 ## How to Use It
 
-You need a single file [microevent.js](https://github.com/mistic100/microevent.js/blob/master/microevent.js).
+You need a single file [uevent.js](https://github.com/mistic100/uEvent/blob/master/uevent.min.js).
 Include it in a webpage via the usual script tag.
 
 ```html
-<script src="microevent.js"></script>
+<script src="uevent.min.js"></script>
 ```
 
 To include it in a nodejs code isn't much harder
 
 ```js
-var MicroEvent = require('./microevent.js')
+var uEvent = require('uevent')
 ```
 
-Now suppose you got a class `Foobar`, and you wish it to support the observer partern
+Now suppose you got a class `Foobar`, and you wish it to support the observer pattern:
 
 ```js
-MicroEvent.mixin(Foobar)
+uEvent.mixin(Foobar)
 ```
 
-If needed you can rename the name of some or all methods
+If needed you can rename the name of some or all methods:
 
 ```js
-MicroEvent.mixin(Foobar, {
+uEvent.mixin(Foobar, {
   'trigger': 'emit',
   'change': 'modify'
 })
@@ -130,7 +130,7 @@ var newVal = obj.change('event', 'Hello world', true, 42)
 
 ## Advanced
 
-MicroEvents integrates two concepts from jQuery : prevent default and stop propagation. This is done via an additional argument transmitted to each `trigger` and/or `change` callback.
+uEvent integrates two concepts from jQuery : prevent default and stop propagation. This is done via an additional argument transmitted to each `trigger` and/or `change` callback.
 
 ### Prevent default
 
@@ -185,27 +185,27 @@ obj.on('event', listener)
 
 ## Example
 
-First we define the class which gonna use MicroEvent.js. This is a ticker, it is
-triggering 'tick' event every second, and add the current date as parameter
+First we define the class which gonna use uEvent. This is a ticker, it is triggering 'tick' event every second, and add the current date as parameter
 
 ```js
-var Ticker = function(){
+var Ticker = function() {
     var self = this;
+    var i = 0;
 
-    setInterval(function(){
+    setInterval(function() {
         self.trigger('tick', new Date());
-        console.log(self.change('hello', 'Hello'));
+        i = self.change('index', i);
     }, 1000);
 };
 ```
 
-We mixin _MicroEvent_ into _Ticker_ and we are all set.
+We mixin _uEvent_ into _Ticker_ and we are all set.
 
 ```
-MicroEvent.mixin(Ticker);
+uEvent.mixin(Ticker);
 ```
 
-Now lets actually use the _Ticker_ Class. First, create the object.
+Now lets actually use the _Ticker_ class. First, create the object.
 
 ```js
 var ticker = new Ticker();
@@ -218,8 +218,9 @@ ticker.on('tick', function(date) {
     console.log('notified date', date);
 });
 
-ticker.on('hello', function(str) {
-    return '<b>' + str + '</b>';
+ticker.on('hello', function(index) {
+    console.log('index', index);
+    return index + 1;
 });
 ```
 
@@ -227,8 +228,8 @@ And you will see this output:
 
 ```
 notified date Tue, 22 Mar 2011 14:43:41 GMT
-<b>Hello</b>
+index 0
 notified date Tue, 22 Mar 2011 14:43:42 GMT
-<b>Hello</b>
+index 1
 ...
 ```

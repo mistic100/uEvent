@@ -1,5 +1,5 @@
 /*!
- * MicroEvent - to make any js object an event emitter
+ * uEvent - to make any js object an event emitter
  * Copyright 2011 Jerome Etienne (http://jetienne.com)
  * Copyright 2015-2016 Damien "Mistic" Sorel (http://www.strangeplanet.fr)
  * Licensed under MIT (http://opensource.org/licenses/MIT)
@@ -13,7 +13,7 @@
         define([], factory);
     }
     else {
-        root.MicroEvent = factory();
+        root.uEvent = factory();
     }
 }(this, function() {
     "use strict";
@@ -25,13 +25,13 @@
         return false;
     };
 
-    var MicroEvent = function() {
+    var uEvent = function() {
     };
 
     /**
      * Event object used to stop propagations and prevent default
      */
-    MicroEvent.Event = function(type, args) {
+    uEvent.Event = function(type, args) {
         var typeReadOnly = type;
         var argsReadonly = args;
 
@@ -55,8 +55,8 @@
         });
     };
 
-    MicroEvent.Event.prototype = {
-        constructor: MicroEvent.Event,
+    uEvent.Event.prototype = {
+        constructor: uEvent.Event,
 
         isDefaultPrevented: returnFalse,
         isPropagationStopped: returnFalse,
@@ -69,8 +69,8 @@
         }
     };
 
-    MicroEvent.prototype = {
-        constructor: MicroEvent,
+    uEvent.prototype = {
+        constructor: uEvent,
 
         /**
          * Add one or many event handlers
@@ -187,11 +187,11 @@
          *
          * @param {String} event name
          * @param {mixed...,optional} arguments
-         * @return {MicroEvent.Event}
+         * @return {uEvent.Event}
          */
         trigger: function(event /* , args... */) {
             var args = Array.prototype.slice.call(arguments, 1);
-            var e = new MicroEvent.Event(event, args);
+            var e = new uEvent.Event(event, args);
             var i, l, f;
 
             args.push(e);
@@ -241,7 +241,7 @@
          */
         change: function(event, value /* , args... */) {
             var args = Array.prototype.slice.call(arguments, 1);
-            var e = new MicroEvent.Event(event, args);
+            var e = new uEvent.Event(event, args);
             var i, l, f;
 
             args.push(e);
@@ -267,18 +267,18 @@
     };
 
     /**
-     * Copy all MicroEvent.js functions in the destination object
+     * Copy all uEvent functions in the destination object
      *
-     * @param {Object} target, the object which will support MicroEvent
+     * @param {Object} target, the object which will support uEvent
      * @param {Object,optional} names, strings map to rename methods
      */
-    MicroEvent.mixin = function(target, names) {
+    uEvent.mixin = function(target, names) {
         names = names || {};
         target = typeof target === 'function' ? target.prototype : target;
 
         ['on', 'off', 'once', 'trigger', 'change'].forEach(function(name) {
             var method = names[name] || name;
-            target[method] = MicroEvent.prototype[name];
+            target[method] = uEvent.prototype[name];
         });
 
         Object.defineProperties(target, {
@@ -293,5 +293,5 @@
         });
     };
 
-    return MicroEvent;
+    return uEvent;
 }));

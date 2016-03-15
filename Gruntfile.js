@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
         banner:
             '/*!\n'+
-            ' * MicroEvent <%= pkg.version %> - to make any js object an event emitter\n'+
+            ' * uEvent <%= pkg.version %> - to make any js object an event emitter\n'+
             ' * Copyright 2011 Jerome Etienne (http://jetienne.com)\n'+
             ' * Copyright 2015-<%= grunt.template.today("yyyy") %> Damien "Mistic" Sorel (http://www.strangeplanet.fr)\n'+
             ' * Licensed under MIT (http://opensource.org/licenses/MIT)\n'+
@@ -22,9 +22,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'microevent.min.js': [
-                        'microevent.js'
-                    ]
+                    'uevent.min.js': ['uevent.js']
                 }
             }
         },
@@ -32,7 +30,7 @@ module.exports = function(grunt) {
         // jshint tests
         jshint: {
             lib: {
-                src: ['microevent.js']
+                src: ['uevent.js']
             }
         },
 

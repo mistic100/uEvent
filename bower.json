@@ -1,8 +1,8 @@
 {
-  "name": "microevent-mistic100",
-  "version": "2.2.0",
+  "name": "uevent",
+  "version": "1.0.0",
   "description": "Event emitter micro library",
-  "main": "microevent.js",
+  "main": "uevent.js",
   "author": [
     {
       "name": "Jerome Etienne",
@@ -19,13 +19,13 @@
     "emitter"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/mistic100/microevent.js",
+  "homepage": "https://github.com/mistic100/uEvent",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mistic100/microevent.js.git"
+    "url": "git://github.com/mistic100/uEvent.git"
   },
   "bugs": {
-    "url": "https://github.com/mistic100/microevent.js/issues"
+    "url": "https://github.com/mistic100/uEvent/issues"
   },
   "ignore": [
     "**/.*",

@@ -1,10 +1,10 @@
-var MicroEvent = require('../microevent.js'),
-    assert = require('assert');
+var uEvent = require('../uevent.js');
+var assert = require('assert');
 
 describe('Adding methods', function() {
     it('add methods to object', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         assert.ok('on' in obj);
         assert.ok('trigger' in obj);
@@ -13,7 +13,7 @@ describe('Adding methods', function() {
     it('add methods to prototype', function() {
         var clazz = function() {
         };
-        MicroEvent.mixin(clazz);
+        uEvent.mixin(clazz);
 
         var obj = new clazz();
 
@@ -23,7 +23,7 @@ describe('Adding methods', function() {
 
     it('add renamed methods to object', function() {
         var obj = {};
-        MicroEvent.mixin(obj, { 'on': 'bind' });
+        uEvent.mixin(obj, { 'on': 'bind' });
 
         assert.ok('bind' in obj);
         assert.ok(!('on' in obj));
@@ -33,7 +33,7 @@ describe('Adding methods', function() {
 describe('Basic usage', function() {
     it('trigger', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         var done = 0;
         obj.on('test', function() {
@@ -47,7 +47,7 @@ describe('Basic usage', function() {
 
     it('once', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         var done = 0;
         obj.once('test', function() {
@@ -61,7 +61,7 @@ describe('Basic usage', function() {
 
     it('change', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         obj.on('test', function(v) {
             return v + 1;
@@ -76,7 +76,7 @@ describe('Basic usage', function() {
 
     it('off', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         var done = 0;
         obj.on('test', function() {
@@ -93,7 +93,7 @@ describe('Separated instances', function() {
     it('different instances should not share events', function() {
         var clazz = function() {
         };
-        MicroEvent.mixin(clazz);
+        uEvent.mixin(clazz);
 
         var obj1 = new clazz();
         var obj2 = new clazz();
@@ -112,7 +112,7 @@ describe('Separated instances', function() {
 describe('Multiple events', function() {
     it('on', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         var done = 0;
 
@@ -139,7 +139,7 @@ describe('Multiple events', function() {
 
     it('off', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         var done = 0;
         var cb1 = function() {
@@ -184,7 +184,7 @@ describe('Multiple events', function() {
 describe('Advanced', function() {
     it('stop propagation in trigger', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         var done = 0;
 
@@ -205,7 +205,7 @@ describe('Advanced', function() {
 
     it('stop propagation in once', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         var done = 0;
 
@@ -227,7 +227,7 @@ describe('Advanced', function() {
 
     it('stop propagation in change', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         obj.on('test', function(v, e) {
             e.stopPropagation();
@@ -246,7 +246,7 @@ describe('Advanced', function() {
 
     it('prevent default', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         obj.on('test', function(e) {
             e.preventDefault();
@@ -258,7 +258,7 @@ describe('Advanced', function() {
 
     it('use handleEvent', function() {
         var obj = {};
-        MicroEvent.mixin(obj);
+        uEvent.mixin(obj);
 
         var listener = {
             done: 0,
