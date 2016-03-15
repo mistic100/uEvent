@@ -1,17 +1,23 @@
 {
   "name": "microevent-mistic100",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Event emitter micro library",
   "main": "microevent.js",
-  "author": [{
-    "name": "Jerome Etienne",
-    "homepage": "http://jetienne.com"
-  }, {
-    "name": "Damien \"Mistic\" Sorel",
-    "email": "contact@git.strangeplanet.fr",
-    "homepage": "http://www.strangeplanet.fr"
-  }],
-  "keywords": ["events", "emitter"],
+  "author": [
+    {
+      "name": "Jerome Etienne",
+      "homepage": "http://jetienne.com"
+    },
+    {
+      "name": "Damien \"Mistic\" Sorel",
+      "email": "contact@git.strangeplanet.fr",
+      "homepage": "http://www.strangeplanet.fr"
+    }
+  ],
+  "keywords": [
+    "events",
+    "emitter"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/mistic100/microevent.js",
   "repository": {
@@ -22,18 +28,14 @@
     "url": "https://github.com/mistic100/microevent.js/issues"
   },
   "devDependencies": {
-    "grunt-contrib-uglify": "~0.8.0",
-    "grunt-contrib-jshint": "~0.11.0",
-    "blanket": "^1.1.6",
-    "grunt-mocha-cov": "^0.4.0"
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.0",
+    "grunt-mocha-test": "^0.12.7",
+    "jit-grunt": "^0.10.0",
+    "time-grunt": "^1.3.0"
   },
   "scripts": {
     "test": "grunt test"
-  },
-  "config": {
-    "blanket": {
-      "pattern": ["microevent.js"],
-      "data-cover-never": ["node_modules", "tests"]
-    }
   }
 }

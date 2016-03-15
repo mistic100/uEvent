@@ -11,8 +11,10 @@ describe('Adding methods', function() {
     });
 
     it('add methods to prototype', function() {
-        var clazz = function(){};
+        var clazz = function() {
+        };
         MicroEvent.mixin(clazz);
+
         var obj = new clazz();
 
         assert.ok('on' in obj);
@@ -21,7 +23,7 @@ describe('Adding methods', function() {
 
     it('add renamed methods to object', function() {
         var obj = {};
-        MicroEvent.mixin(obj, {'on': 'bind'});
+        MicroEvent.mixin(obj, { 'on': 'bind' });
 
         assert.ok('bind' in obj);
         assert.ok(!('on' in obj));
@@ -34,7 +36,9 @@ describe('Basic usage', function() {
         MicroEvent.mixin(obj);
 
         var done = 0;
-        obj.on('test', function() { done++; });
+        obj.on('test', function() {
+            done++;
+        });
         obj.trigger('test');
         obj.trigger('test');
 
@@ -46,7 +50,9 @@ describe('Basic usage', function() {
         MicroEvent.mixin(obj);
 
         var done = 0;
-        obj.once('test', function() { done++; });
+        obj.once('test', function() {
+            done++;
+        });
         obj.trigger('test');
         obj.trigger('test');
 
@@ -57,8 +63,12 @@ describe('Basic usage', function() {
         var obj = {};
         MicroEvent.mixin(obj);
 
-        obj.on('test', function(v) { return v+1; });
-        obj.on('test', function(v) { return v+1; });
+        obj.on('test', function(v) {
+            return v + 1;
+        });
+        obj.on('test', function(v) {
+            return v + 1;
+        });
         var done = obj.change('test', 0);
 
         assert.equal(done, 2);
@@ -69,7 +79,9 @@ describe('Basic usage', function() {
         MicroEvent.mixin(obj);
 
         var done = 0;
-        obj.on('test', function() { done++; });
+        obj.on('test', function() {
+            done++;
+        });
         obj.off('test');
         obj.trigger('test');
 
@@ -79,13 +91,17 @@ describe('Basic usage', function() {
 
 describe('Separated instances', function() {
     it('different instances should not share events', function() {
-        var clazz = function(){};
+        var clazz = function() {
+        };
         MicroEvent.mixin(clazz);
+
         var obj1 = new clazz();
         var obj2 = new clazz();
 
         var done = 0;
-        obj1.on('test', function() { done++; });
+        obj1.on('test', function() {
+            done++;
+        });
         obj1.trigger('test');
         obj2.trigger('test');
 
@@ -101,10 +117,16 @@ describe('Multiple events', function() {
         var done = 0;
 
         // add four handlers
-        obj.on('test1 test2', function() { done++; });
+        obj.on('test1 test2', function() {
+            done++;
+        });
         obj.on({
-            test3: function() { done++; },
-            test4: function() { done++; }
+            test3: function() {
+                done++;
+            },
+            test4: function() {
+                done++;
+            }
         });
 
         obj.trigger('test1');
@@ -120,8 +142,12 @@ describe('Multiple events', function() {
         MicroEvent.mixin(obj);
 
         var done = 0;
-        var cb1 = function() { done++; };
-        var cb2 = function() { done++; };
+        var cb1 = function() {
+            done++;
+        };
+        var cb2 = function() {
+            done++;
+        };
 
         // add 5 handlers
         obj.on('test1 test2', cb1);
@@ -167,7 +193,9 @@ describe('Advanced', function() {
             e.stopPropagation();
         });
         obj.on({
-            test: function(e) { done++; }
+            test: function(e) {
+                done++;
+            }
         });
 
         obj.trigger('test');
@@ -186,7 +214,9 @@ describe('Advanced', function() {
             e.stopPropagation();
         });
         obj.once({
-            test: function(e) { done++; }
+            test: function(e) {
+                done++;
+            }
         });
 
         obj.trigger('test');
@@ -201,10 +231,12 @@ describe('Advanced', function() {
 
         obj.on('test', function(v, e) {
             e.stopPropagation();
-            return v+1;
+            return v + 1;
         });
         obj.on({
-            test: function(v, e) { return v+1; }
+            test: function(v, e) {
+                return v + 1;
+            }
         });
 
         var done = obj.change('test', 0);
@@ -219,9 +251,26 @@ describe('Advanced', function() {
         obj.on('test', function(e) {
             e.preventDefault();
         });
-
         var e = obj.trigger('test');
 
         assert.ok(e.isDefaultPrevented());
+    });
+
+    it('use handleEvent', function() {
+        var obj = {};
+        MicroEvent.mixin(obj);
+
+        var listener = {
+            done: 0,
+            handleEvent: function(e) {
+                if (e.type === 'test' && e.args[0] === 'foo') {
+                    this.done++;
+                }
+            }
+        };
+        obj.on('test', listener);
+        obj.trigger('test', 'foo');
+
+        assert.equal(listener.done, 1);
     });
 });

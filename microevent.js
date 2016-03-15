@@ -1,7 +1,7 @@
 /*!
  * MicroEvent - to make any js object an event emitter
  * Copyright 2011 Jerome Etienne (http://jetienne.com)
- * Copyright 2015 Damien "Mistic" Sorel (http://www.strangeplanet.fr)
+ * Copyright 2015-2016 Damien "Mistic" Sorel (http://www.strangeplanet.fr)
  * Licensed under MIT (http://opensource.org/licenses/MIT)
  */
 
@@ -17,16 +17,43 @@
     }
 }(this, function() {
     "use strict";
-    
-    var returnTrue = function() { return true; },
-        returnFalse = function() { return false; };
 
-    var MicroEvent = function(){};
+    var returnTrue = function() {
+        return true;
+    };
+    var returnFalse = function() {
+        return false;
+    };
+
+    var MicroEvent = function() {
+    };
 
     /**
      * Event object used to stop propagations and prevent default
      */
-    MicroEvent.Event = function(){};
+    MicroEvent.Event = function(type, args) {
+        var typeReadOnly = type;
+        var argsReadonly = args;
+
+        Object.defineProperties(this, {
+            'type': {
+                get: function() {
+                    return typeReadOnly;
+                },
+                set: function(value) {
+                },
+                enumerable: true
+            },
+            'args': {
+                get: function() {
+                    return argsReadonly;
+                },
+                set: function(value) {
+                },
+                enumerable: true
+            }
+        });
+    };
 
     MicroEvent.Event.prototype = {
         constructor: MicroEvent.Event,
@@ -34,8 +61,12 @@
         isDefaultPrevented: returnFalse,
         isPropagationStopped: returnFalse,
 
-        preventDefault: function() { this.isDefaultPrevented = returnTrue; },
-        stopPropagation: function() { this.isPropagationStopped = returnTrue; }
+        preventDefault: function() {
+            this.isDefaultPrevented = returnTrue;
+        },
+        stopPropagation: function() {
+            this.isPropagationStopped = returnTrue;
+        }
     };
 
     MicroEvent.prototype = {
@@ -44,29 +75,30 @@
         /**
          * Add one or many event handlers
          *
+         *  obj.on('event', callback)
+         *  obj.on('event', listener) -- listener has an handleEvent method
+         *  obj.on('event1 event2', callback)
+         *  obj.on({ event1: callback1, event2: callback2 })
+         *
          * @param {String,Object} events
          * @param {Function,optional} callback
          * @return {Object} main object
-         *
-         * obj.on('event', callback)
-         * obj.on('event1 event2', callback)
-         * obj.on({ event1: callback1, event2: callback2 })
          */
-        on: function (events, fct) {
-            this._events = this._events || {};
+        on: function(events, callback) {
+            this.__events = this.__events || {};
 
             if (typeof events === 'object') {
                 for (var event in events) {
                     if (events.hasOwnProperty(event)) {
-                        this._events[event] = this._events[event] || [];
-                        this._events[event].push(events[event]);
+                        this.__events[event] = this.__events[event] || [];
+                        this.__events[event].push(events[event]);
                     }
                 }
             }
             else {
                 events.split(' ').forEach(function(event) {
-                    this._events[event] = this._events[event] || [];
-                    this._events[event].push(fct);
+                    this.__events[event] = this.__events[event] || [];
+                    this.__events[event].push(callback);
                 }, this);
             }
 
@@ -76,42 +108,42 @@
         /**
          * Remove one or many or all event handlers
          *
+         *  obj.off('event')
+         *  obj.off('event', callback)
+         *  obj.off('event1 event2')
+         *  obj.off({ event1: callback1, event2: callback2 })
+         *  obj.off()
+         *
          * @param {String|Object,optional} events
          * @param {Function,optional} callback
          * @return {Object} main object
-         *
-         * obj.off('event')
-         * obj.off('event', callback)
-         * obj.off('event1 event2')
-         * obj.off({ event1: callback1, event2: callback2 })
-         * obj.off()
          */
-        off: function (events, fct) {
-            this._events = this._events || {};
+        off: function(events, callback) {
+            this.__events = this.__events || {};
 
             if (typeof events === 'object') {
                 for (var event in events) {
-                    if (events.hasOwnProperty(event) && (event in this._events)) {
-                        var index = this._events[event].indexOf(events[event]);
-                        if (index !== -1) this._events[event].splice(index, 1);
+                    if (events.hasOwnProperty(event) && (event in this.__events)) {
+                        var index = this.__events[event].indexOf(events[event]);
+                        if (index !== -1) this.__events[event].splice(index, 1);
                     }
                 }
             }
             else if (!!events) {
                 events.split(' ').forEach(function(event) {
-                    if (event in this._events) {
-                        if (fct) {
-                            var index = this._events[event].indexOf(fct);
-                            if (index !== -1) this._events[event].splice(index, 1);
+                    if (event in this.__events) {
+                        if (callback) {
+                            var index = this.__events[event].indexOf(callback);
+                            if (index !== -1) this.__events[event].splice(index, 1);
                         }
                         else {
-                            this._events[event] = [];
+                            this.__events[event].length = 0;
                         }
                     }
                 }, this);
             }
             else {
-                this._events = {};
+                this.__events = {};
             }
 
             return this;
@@ -121,29 +153,29 @@
          * Add one or many event handlers that will be called only once
          * This handlers are only applicable to "trigger", not "change"
          *
+         *  obj.once('event', callback)
+         *  obj.once('event1 event2', callback)
+         *  obj.once({ event1: callback1, event2: callback2 })
+         *
          * @param {String|Object} events
          * @param {Function,optional} callback
          * @return {Object} main object
-         *
-         * obj.once('event', callback)
-         * obj.once('event1 event2', callback)
-         * obj.once({ event1: callback1, event2: callback2 })
          */
-        once: function (events, fct) {
-            this._once = this._once || {};
+        once: function(events, callback) {
+            this.__once = this.__once || {};
 
             if (typeof events === 'object') {
                 for (var event in events) {
                     if (events.hasOwnProperty(event)) {
-                        this._once[event] = this._once[event] || [];
-                        this._once[event].push(events[event]);
+                        this.__once[event] = this.__once[event] || [];
+                        this.__once[event].push(events[event]);
                     }
                 }
             }
             else {
                 events.split(' ').forEach(function(event) {
-                    this._once[event] = this._once[event] || [];
-                    this._once[event].push(fct);
+                    this.__once[event] = this.__once[event] || [];
+                    this.__once[event].push(callback);
                 }, this);
             }
 
@@ -154,34 +186,46 @@
          * Trigger all handlers for an event
          *
          * @param {String} event name
-         * @param {mixed...} optional, arguments
+         * @param {mixed...,optional} arguments
          * @return {MicroEvent.Event}
          */
-        trigger: function (event /* , args... */) {
-            var args = Array.prototype.slice.call(arguments, 1),
-                e = new MicroEvent.Event(),
-                i, l;
+        trigger: function(event /* , args... */) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            var e = new MicroEvent.Event(event, args);
+            var i, l, f;
 
             args.push(e);
 
-            if (this._events && event in this._events) {
-                for (i=0, l=this._events[event].length; i<l; i++) {
-                    this._events[event][i].apply(this, args);
+            if (this.__events && event in this.__events) {
+                for (i = 0, l = this.__events[event].length; i < l; i++) {
+                    f = this.__events[event][i];
+                    if (typeof f === 'object') {
+                        f.handleEvent(e);
+                    }
+                    else {
+                        f.apply(this, args);
+                    }
                     if (e.isPropagationStopped()) {
                         return e;
                     }
                 }
             }
 
-            if (this._once && event in this._once) {
-                for (i=0, l=this._once[event].length; i<l; i++) {
-                    this._once[event][i].apply(this, args);
+            if (this.__once && event in this.__once) {
+                for (i = 0, l = this.__once[event].length; i < l; i++) {
+                    f = this.__once[event][i];
+                    if (typeof f === 'object') {
+                        f.handleEvent(e);
+                    }
+                    else {
+                        f.apply(this, args);
+                    }
                     if (e.isPropagationStopped()) {
-                        delete this._once[event];
+                        delete this.__once[event];
                         return e;
                     }
                 }
-                delete this._once[event];
+                delete this.__once[event];
             }
 
             return e;
@@ -192,20 +236,26 @@
          *
          * @param {String} event name
          * @param {mixed} event value
-         * @param {mixed...} optional, arguments
-         * @return {Mixed} modified value
+         * @param {mixed...,optional} arguments
+         * @return {mixed} modified value
          */
         change: function(event, value /* , args... */) {
-            var args = Array.prototype.slice.call(arguments, 1),
-                e = new MicroEvent.Event(),
-                i, l;
+            var args = Array.prototype.slice.call(arguments, 1);
+            var e = new MicroEvent.Event(event, args);
+            var i, l, f;
 
             args.push(e);
 
-            if (this._events && event in this._events) {
-                for (i=0, l=this._events[event].length; i<l; i++) {
+            if (this.__events && event in this.__events) {
+                for (i = 0, l = this.__events[event].length; i < l; i++) {
                     args[0] = value;
-                    value = this._events[event][i].apply(this, args);
+                    f = this.__events[event][i];
+                    if (typeof f === 'object') {
+                        value = f.handleEvent(e);
+                    }
+                    else {
+                        value = f.apply(this, args);
+                    }
                     if (e.isPropagationStopped()) {
                         return value;
                     }
@@ -219,30 +269,24 @@
     /**
      * Copy all MicroEvent.js functions in the destination object
      *
-     * @param {Object} the object which will support MicroEvent
-     * @param {Object} optional, strings map to rename methods
+     * @param {Object} target, the object which will support MicroEvent
+     * @param {Object,optional} names, strings map to rename methods
      */
-    MicroEvent.mixin = function (obj, names) {
+    MicroEvent.mixin = function(target, names) {
         names = names || {};
-        var props = ['on', 'off', 'once', 'trigger', 'change'];
+        target = typeof target === 'function' ? target.prototype : target;
 
-        for (var i=0, l=props.length; i<l; i++) {
-            var method = names[props[i]] || props[i];
+        ['on', 'off', 'once', 'trigger', 'change'].forEach(function(name) {
+            var method = names[name] || name;
+            target[method] = MicroEvent.prototype[name];
+        });
 
-            if (typeof obj === 'function') {
-                obj.prototype[method] = MicroEvent.prototype[props[i]];
-            }
-            else {
-                obj[method] = MicroEvent.prototype[props[i]];
-            }
-        }
-
-        Object.defineProperties(typeof obj === 'function' ? obj.prototype : obj, {
-            '_events': {
+        Object.defineProperties(target, {
+            '__events': {
                 value: null,
                 writable: true
             },
-            '_once': {
+            '__once': {
                 value: null,
                 writable: true
             }

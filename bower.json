@@ -1,17 +1,23 @@
 {
   "name": "microevent-mistic100",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Event emitter micro library",
   "main": "microevent.js",
-  "author": [{
-    "name": "Jerome Etienne",
-    "homepage": "http://jetienne.com"
-  }, {
-    "name": "Damien \"Mistic\" Sorel",
-    "email": "contact@git.strangeplanet.fr",
-    "homepage": "http://www.strangeplanet.fr"
-  }],
-  "keywords": ["events", "emitter"],
+  "author": [
+    {
+      "name": "Jerome Etienne",
+      "homepage": "http://jetienne.com"
+    },
+    {
+      "name": "Damien \"Mistic\" Sorel",
+      "email": "contact@git.strangeplanet.fr",
+      "homepage": "http://www.strangeplanet.fr"
+    }
+  ],
+  "keywords": [
+    "events",
+    "emitter"
+  ],
   "license": "MIT",
   "homepage": "https://github.com/mistic100/microevent.js",
   "repository": {

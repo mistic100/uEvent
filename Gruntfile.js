@@ -1,4 +1,9 @@
 module.exports = function(grunt) {
+    require('time-grunt')(grunt);
+    require('jit-grunt')(grunt);
+
+    grunt.util.linefeed = '\n';
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
@@ -6,7 +11,7 @@ module.exports = function(grunt) {
             '/*!\n'+
             ' * MicroEvent <%= pkg.version %> - to make any js object an event emitter\n'+
             ' * Copyright 2011 Jerome Etienne (http://jetienne.com)\n'+
-            ' * Copyright <%= grunt.template.today("yyyy") %> Damien "Mistic" Sorel (http://www.strangeplanet.fr)\n'+
+            ' * Copyright 2015-<%= grunt.template.today("yyyy") %> Damien "Mistic" Sorel (http://www.strangeplanet.fr)\n'+
             ' * Licensed under MIT (http://opensource.org/licenses/MIT)\n'+
             ' */',
 
@@ -27,36 +32,20 @@ module.exports = function(grunt) {
         // jshint tests
         jshint: {
             lib: {
-                files: {
-                    src: [
-                        'microevent.js'
-                    ]
-                }
+                src: ['microevent.js']
             }
         },
 
-        // mocha tests
-        mochacov: {
-            coverage: {
-                options: {
-                    coveralls: true
-                }
-            },
-            test: {
-                options: {
-                    reporter: 'html-cov',
-                    output: 'coverage.html'
-                }
-            },
+        // Mocha tests
+        mochaTest: {
             options: {
-                files: 'tests/*.js'
+                log: true
+            },
+            lib: {
+                src: ['tests/*.js']
             }
         }
     });
-
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-mocha-cov');
 
     grunt.registerTask('default', [
         'uglify'
@@ -64,11 +53,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', [
         'jshint',
-        'mochacov:test'
-    ]);
-
-    grunt.registerTask('test-travis', [
-        'jshint',
-        'mochacov:coverage'
+        'mochaTest'
     ]);
 };

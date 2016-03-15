@@ -3,7 +3,6 @@
 [![Bower version](https://badge.fury.io/bo/microevent-mistic100.svg)](http://badge.fury.io/bo/microevent-mistic100)
 [![npm version](https://badge.fury.io/js/microevent-mistic100.svg)](http://badge.fury.io/js/microevent-mistic100)
 [![Build Status](https://travis-ci.org/mistic100/microevent.js.svg?branch=master)](https://travis-ci.org/mistic100/microevent.js)
-[![Coverage Status](https://coveralls.io/repos/mistic100/microevent.js/badge.svg)](https://coveralls.io/r/mistic100/microevent.js)
 
 _MicroEvent.js_ is a event emitter library which provides the [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
 It works on node.js and browser and also supports RequireJS (AMD).
@@ -15,7 +14,7 @@ It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/
 * AMD support
 * renamed `bind`/`unbind` into `on`/`off`
 * `on` and `off` can be called with a space separated list of events like jQuery
-* `on` and `off` can be called with a hash like jQuery
+* `on` and `off` can be called with a hashmap like jQuery
 * add `once` method [alinz](https://github.com/alinz/microevent.js/commit/a8293fe9571ea4e609d51ec906d627e64dfb8eba)
 * add `change` method
 * allow to rename methods in the mixin
@@ -23,12 +22,7 @@ It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/
 * fix error in `off` [#27](https://github.com/jeromeetienne/microevent.js/pull/27)
 * fix callback skips when `off` is called from another callback [#10](https://github.com/jeromeetienne/microevent.js/issues/10)
 * integrate **prevent default** and **stop propagation** patterns
-
-### Users
-
-* [jQuery QueryBuilder](https://github.com/mistic100/jQuery-QueryBuilder)
-
-_You use MicroEvent in your project ? Just let me know or create a PR :octocat:_
+* listeners can be objects with an [handleEvent](https://developer.mozilla.org/en/docs/Web/API/EventListener#handleEvent()) method
 
 ## How to Use It
 
@@ -68,7 +62,7 @@ Add one or many event handlers.
 
 ```js
 // bind 'callback' to 'event'
-obj.on('event', callback)
+obj.on('event', callback);
 
 // bind 'callback' to 'event1' and 'event2'
 obj.on('event1 event2', callback)
@@ -174,6 +168,21 @@ var newVal = obj.change('event', '1234');
 // newVal is still '1234'
 ```
 
+### Event listener
+
+When using `on`, `off` and `once` you can provide an object instead of the callback. The `handleEvent` method of this object will be called with the event object as first argument.
+
+```js
+var listener = {
+    handleEvent: function(e) {
+        // e.type : name of the event
+        // e.args : array of 'trigger' arguments
+    }
+};
+
+obj.on('event', listener)
+```
+
 ## Example
 
 First we define the class which gonna use MicroEvent.js. This is a ticker, it is
@@ -182,7 +191,7 @@ triggering 'tick' event every second, and add the current date as parameter
 ```js
 var Ticker = function(){
     var self = this;
-    
+
     setInterval(function(){
         self.trigger('tick', new Date());
         console.log(self.change('hello', 'Hello'));
