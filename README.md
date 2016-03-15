@@ -2,7 +2,7 @@
 
 [![Bower version](https://img.shields.io/bower/v/uevent.svg?style=flat-square)](https://github.com/mistic100/uEvent)
 [![NPM version](https://img.shields.io/npm/v/uevent.svg?style=flat-square)](https://www.npmjs.com/package/uevent)
-[![Build Status](https://travis-ci.org/mistic100/uEvent.svg?branch=master)](https://travis-ci.org/mistic100/uEvent)
+[![Build Status](https://img.shields.io/travis/mistic100/uEvent.svg?style=flat-square)](https://travis-ci.org/mistic100/uEvent)
 
 _uEvent_ is a event emitter library which provides the [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
 It works on node.js and browser and also supports RequireJS (AMD).
