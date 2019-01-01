@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/uevent.svg?style=flat-square)](https://www.npmjs.com/package/uevent)
 [![jsDelivr CDN](https://data.jsdelivr.com/v1/package/npm/uevent/badge)](https://www.jsdelivr.com/package/npm/uevent)
 [![Build Status](https://img.shields.io/travis/mistic100/uEvent/master.svg?style=flat-square)](https://travis-ci.org/mistic100/uEvent)
-[![Dependencies Status](https://david-dm.org/mistic100/uEvent/status.svg?style=flat-square)](https://david-dm.org/mistic100/uEvent)
+[![Dependencies Status](https://david-dm.org/mistic100/uEvent/status.svg?style=flat-square)](https://david-dm.org/mistic100/uEvent) [![Greenkeeper badge](https://badges.greenkeeper.io/mistic100/uEvent.svg)](https://greenkeeper.io/)
 
 _uEvent_ is a event emitter library which provides the [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
 It works on node.js and browser and also supports RequireJS (AMD).
