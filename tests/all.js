@@ -1,84 +1,101 @@
-var uEvent = require('../uevent.js');
-var assert = require('assert');
+const uevent = require('../index');
+const assert = require('assert');
 
 describe('Adding methods', function() {
     it('add methods to object', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
         assert.ok('on' in obj);
         assert.ok('trigger' in obj);
     });
 
     it('add methods to prototype', function() {
-        var clazz = function() {
+        const Clazz = function() {
         };
-        uEvent.mixin(clazz);
+        uevent.mixin(Clazz);
 
-        var obj = new clazz();
+        const obj = new Clazz();
 
         assert.ok('on' in obj);
         assert.ok('trigger' in obj);
     });
 
-    it('add renamed methods to object', function() {
-        var obj = {};
-        uEvent.mixin(obj, { 'on': 'bind' });
+    it('extends EventEmitter', function() {
+        const Clazz = function() {
+        };
+        Clazz.prototype = new uevent.EventEmitter();
+        Clazz.prototype.constructor = Clazz;
 
-        assert.ok('bind' in obj);
-        assert.ok(!('on' in obj));
+        const obj = new Clazz();
+
+        assert.ok('on' in obj);
+        assert.ok('trigger' in obj);
     });
 });
 
 describe('Basic usage', function() {
     it('trigger', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        var done = 0;
+        let done = 0;
         obj.on('test', function() {
             done++;
         });
         obj.trigger('test');
         obj.trigger('test');
 
-        assert.equal(done, 2);
+        assert.strictEqual(done, 2);
+    });
+
+    it('trigger w. parameters', function() {
+        const obj = {};
+        uevent.mixin(obj);
+
+        let done = null;
+        obj.on('test', function(e, a, b) {
+            done = [a, b];
+        });
+        obj.trigger('test', 'foo', 'bar');
+
+        assert.deepStrictEqual(done, ['foo', 'bar']);
     });
 
     it('once', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        var done = 0;
+        let done = 0;
         obj.once('test', function() {
             done++;
         });
         obj.trigger('test');
         obj.trigger('test');
 
-        assert.equal(done, 1);
+        assert.strictEqual(done, 1);
     });
 
     it('change', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        obj.on('test', function(v) {
+        obj.on('test', function(e, v) {
             return v + 1;
         });
-        obj.on('test', function(v) {
+        obj.on('test', function(e, v) {
             return v + 1;
         });
-        var done = obj.change('test', 0);
+        let done = obj.change('test', 0);
 
-        assert.equal(done, 2);
+        assert.strictEqual(done, 2);
     });
 
     it('off', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        var done = 0;
+        let done = 0;
         obj.on('test', function() {
             done++;
         });
@@ -91,30 +108,30 @@ describe('Basic usage', function() {
 
 describe('Separated instances', function() {
     it('different instances should not share events', function() {
-        var clazz = function() {
+        const Clazz = function() {
         };
-        uEvent.mixin(clazz);
+        uevent.mixin(Clazz);
 
-        var obj1 = new clazz();
-        var obj2 = new clazz();
+        const obj1 = new Clazz();
+        const obj2 = new Clazz();
 
-        var done = 0;
+        let done = 0;
         obj1.on('test', function() {
             done++;
         });
         obj1.trigger('test');
         obj2.trigger('test');
 
-        assert.equal(done, 1);
+        assert.strictEqual(done, 1);
     });
 });
 
 describe('Multiple events', function() {
     it('on', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        var done = 0;
+        let done = 0;
 
         // add four handlers
         obj.on('test1 test2', function() {
@@ -134,18 +151,18 @@ describe('Multiple events', function() {
         obj.trigger('test3');
         obj.trigger('test4');
 
-        assert.equal(done, 4);
+        assert.strictEqual(done, 4);
     });
 
     it('off', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        var done = 0;
-        var cb1 = function() {
+        let done = 0;
+        const cb1 = function() {
             done++;
         };
-        var cb2 = function() {
+        const cb2 = function() {
             done++;
         };
 
@@ -177,44 +194,44 @@ describe('Multiple events', function() {
         obj.off();
         obj.trigger('test4');
 
-        assert.equal(done, 1);
+        assert.strictEqual(done, 1);
     });
 });
 
 describe('Advanced', function() {
     it('stop propagation in trigger', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        var done = 0;
+        let done = 0;
 
         obj.on('test', function(e) {
             done++;
             e.stopPropagation();
         });
         obj.on({
-            test: function(e) {
+            test: function() {
                 done++;
             }
         });
 
         obj.trigger('test');
 
-        assert.equal(done, 1);
+        assert.strictEqual(done, 1);
     });
 
     it('stop propagation in once', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        var done = 0;
+        let done = 0;
 
         obj.once('test', function(e) {
             done++;
             e.stopPropagation();
         });
         obj.once({
-            test: function(e) {
+            test: function() {
                 done++;
             }
         });
@@ -222,46 +239,46 @@ describe('Advanced', function() {
         obj.trigger('test');
         obj.trigger('test');
 
-        assert.equal(done, 1);
+        assert.strictEqual(done, 1);
     });
 
     it('stop propagation in change', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        obj.on('test', function(v, e) {
+        obj.on('test', function(e, v) {
             e.stopPropagation();
             return v + 1;
         });
         obj.on({
-            test: function(v, e) {
+            test: function(e, v) {
                 return v + 1;
             }
         });
 
-        var done = obj.change('test', 0);
+        let done = obj.change('test', 0);
 
-        assert.equal(done, 1);
+        assert.strictEqual(done, 1);
     });
 
     it('prevent default', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
         obj.on('test', function(e) {
             e.preventDefault();
         });
-        var e = obj.trigger('test');
+        const e = obj.trigger('test');
 
         assert.ok(e.isDefaultPrevented());
     });
 
     it('use handleEvent', function() {
-        var obj = {};
-        uEvent.mixin(obj);
+        const obj = {};
+        uevent.mixin(obj);
 
-        var listener = {
-            done: 0,
+        const listener = {
+            done       : 0,
             handleEvent: function(e) {
                 if (e.type === 'test' && e.args[0] === 'foo') {
                     this.done++;
@@ -271,6 +288,6 @@ describe('Advanced', function() {
         obj.on('test', listener);
         obj.trigger('test', 'foo');
 
-        assert.equal(listener.done, 1);
+        assert.strictEqual(listener.done, 1);
     });
 });
