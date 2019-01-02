@@ -4,10 +4,10 @@
  * @licence MIT
  */
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, global.uevent = factory());
-}(this, function () { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (global = global || self, factory(global.uEvent = {}));
+}(this, function (exports) { 'use strict';
 
     var returnTrue = function returnTrue() {
       return true;
@@ -304,13 +304,18 @@
       });
     }
 
-    var uevent = {
+    var uEvent = {
       EventEmitter: EventEmitter_1,
       mixin: mixin
     };
-    var uEvent = uevent;
+    var uEvent_1 = uEvent.EventEmitter;
+    var uEvent_2 = uEvent.mixin;
 
-    return uEvent;
+    exports.default = uEvent;
+    exports.EventEmitter = uEvent_1;
+    exports.mixin = uEvent_2;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
 //# sourceMappingURL=browser.js.map

@@ -7,7 +7,7 @@ export default {
     input   : 'index.js',
     output  : {
         file     : 'browser.js',
-        name     : 'uevent',
+        name     : 'uEvent',
         format   : 'umd',
         sourcemap: true,
         banner   : `/*!

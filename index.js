@@ -19,9 +19,7 @@ function mixin(target) {
     });
 }
 
-const uevent = {
+module.exports = {
     EventEmitter: EventEmitter,
     mixin       : mixin,
 };
-
-module.exports = uevent;
