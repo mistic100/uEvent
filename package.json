@@ -4,6 +4,7 @@
   "description": "Event emitter micro library",
   "main": "index.js",
   "browser": "browser.js",
+  "types": "types.d.ts",
   "author":     {
     "name": "Damien \"Mistic\" Sorel",
     "email": "contact@git.strangeplanet.fr",
