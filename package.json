@@ -5,7 +5,13 @@
   "main": "index.js",
   "browser": "browser.js",
   "types": "types.d.ts",
-  "author":     {
+  "files": [
+    "src/",
+    "browser.js",
+    "browser.js.map",
+    "types.d.ts"
+  ],
+  "author": {
     "name": "Damien \"Mistic\" Sorel",
     "email": "contact@git.strangeplanet.fr",
     "homepage": "https://www.strangeplanet.fr"
@@ -24,15 +30,15 @@
     "url": "https://github.com/mistic100/uEvent/issues"
   },
   "devDependencies": {
-      "@babel/core": "^7.2.2",
-      "@babel/preset-env": "^7.2.3",
-      "mocha": "^5.2.0",
-      "rollup": "^1.0.0",
-      "rollup-plugin-babel": "^4.2.0",
-      "rollup-plugin-commonjs": "^9.2.0"
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "mocha": "^5.2.0",
+    "rollup": "^1.0.0",
+    "rollup-plugin-babel": "^4.2.0",
+    "rollup-plugin-commonjs": "^9.2.0"
   },
   "scripts": {
-      "test": "mocha tests/*",
-      "compile": "rollup --config rollup.config.js"
+    "test": "mocha tests/*",
+    "compile": "rollup --config rollup.config.js"
   }
 }
