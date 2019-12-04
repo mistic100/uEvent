@@ -3,7 +3,6 @@
 [![npm version](https://img.shields.io/npm/v/uevent.svg?style=flat-square)](https://www.npmjs.com/package/uevent)
 [![jsDelivr CDN](https://data.jsdelivr.com/v1/package/npm/uevent/badge)](https://www.jsdelivr.com/package/npm/uevent)
 [![Build Status](https://github.com/mistic100/uEvent/workflows/CI/badge.svg)](https://github.com/mistic100/uEvent/actions)
-[![Dependencies Status](https://david-dm.org/mistic100/uEvent/status.svg?style=flat-square)](https://david-dm.org/mistic100/uEvent)
 
 _uEvent_ is a event emitter library which provides the [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
 It works on node.js and browser and also supports RequireJS (AMD).
@@ -13,8 +12,7 @@ It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/
 
 ## Features
 
-* jQuery-like API (`on`, `off`, `trigger`)
-* Once support
+* jQuery-like API (`on`, `off`, `once`, trigger`)
 * Value modifier support
 * **prevent default** and **stop propagation** patterns
 * [handleEvent](https://developer.mozilla.org/en/docs/Web/API/EventListener#handleEvent()) support

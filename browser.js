@@ -7,7 +7,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
     (global = global || self, factory(global.uEvent = {}));
-}(this, function (exports) { 'use strict';
+}(this, (function (exports) { 'use strict';
 
     var returnTrue = function returnTrue() {
       return true;
@@ -311,11 +311,11 @@
     var uEvent_1 = uEvent.EventEmitter;
     var uEvent_2 = uEvent.mixin;
 
-    exports.default = uEvent;
     exports.EventEmitter = uEvent_1;
+    exports.default = uEvent;
     exports.mixin = uEvent_2;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=browser.js.map
