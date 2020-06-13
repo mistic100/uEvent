@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/uevent.svg?style=flat-square)](https://www.npmjs.com/package/uevent)
 [![jsDelivr CDN](https://data.jsdelivr.com/v1/package/npm/uevent/badge)](https://www.jsdelivr.com/package/npm/uevent)
+[![GZIP size](https://flat.badgen.net/bundlephobia/minzip/uevent)](https://bundlephobia.com/result?p=uevent)
 [![Build Status](https://github.com/mistic100/uEvent/workflows/CI/badge.svg)](https://github.com/mistic100/uEvent/actions)
 
 _uEvent_ is a event emitter library which provides the [observer pattern](http://en.wikipedia.org/wiki/Observer_pattern) to javascript objects.
