@@ -1,12 +1,12 @@
 /*!
- * uevent (v2.0.0)
- * @copyright 2015-2019 Damien "Mistic" Sorel <contact@git.strangeplanet.fr>
+ * uevent (v2.0.1)
+ * @copyright 2015-2021 Damien "Mistic" Sorel <contact@git.strangeplanet.fr>
  * @licence MIT
  */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
     typeof define === 'function' && define.amd ? define(['exports'], factory) :
-    (global = global || self, factory(global.uEvent = {}));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.uEvent = {}));
 }(this, (function (exports) { 'use strict';
 
     var returnTrue = function returnTrue() {
@@ -17,9 +17,7 @@
       return false;
     };
 
-    var Event =
-    /*#__PURE__*/
-    function () {
+    var Event = /*#__PURE__*/function () {
       /**
        * @param {*} target
        * @param {String} type
@@ -72,9 +70,7 @@
      * @typedef {Object.<String, Function>} Callbacks
      */
 
-    var EventEmitter =
-    /*#__PURE__*/
-    function () {
+    var EventEmitter = /*#__PURE__*/function () {
       function EventEmitter() {}
 
       var _proto = EventEmitter.prototype;
