@@ -33,13 +33,15 @@ $ npm install uevent
 **Direct**
 
 ```js
-const obj = new uevent.EventEmitter();
+import { EventEmitter } from 'uevent';
+
+const obj = new EventEmitter();
 ```
 
 **Class extend**
 
 ```js
-class Manager extends uevent.EventEmitter {
+class Manager extends EventEmitter {
 
 }
 
@@ -49,9 +51,11 @@ class obj = new Manager();
 **Mixin**
 
 ```js
+import { mixin as eventEmitterMixin } from 'uevent';
+
 const obj = {};
 
-uevent.mixin(obj);
+eventEmitterMixin(obj);
 ```
 
 ### Callback signature

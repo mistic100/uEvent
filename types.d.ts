@@ -47,13 +47,13 @@ declare namespace uevent {
 
         change<T>(event: string, value: T, ...args: any[]): T;
     }
-
-    interface uEvent {
-        EventEmitter: EventEmitter;
-        mixin: (target: any) => void;
-    }
 }
 
-declare const uevent: uevent.uEvent;
+declare const uevent: {
+    EventEmitter: {
+        new(): uevent.EventEmitter;
+    };
+    mixin: (target: any) => void;
+};
 export = uevent;
 export as namespace uevent;
