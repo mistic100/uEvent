@@ -13,7 +13,7 @@ It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/
 
 ## Features
 
-* jQuery-like API (`on`, `off`, `once`, trigger`)
+* jQuery-like API (`on`, `off`, `once`, `trigger`)
 * Value modifier support
 * **prevent default** and **stop propagation** patterns
 * [handleEvent](https://developer.mozilla.org/en/docs/Web/API/EventListener#handleEvent()) support

@@ -10,6 +10,7 @@ export default {
         name     : 'uEvent',
         format   : 'umd',
         sourcemap: true,
+        exports  : 'named',
         banner   : `/*!
  * ${pkg.name} (v${pkg.version})
  * @copyright 2015-${new Date().getFullYear()} ${pkg.author.name} <${pkg.author.email}>

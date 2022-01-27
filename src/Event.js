@@ -1,8 +1,8 @@
-const returnTrue = function() {
+const returnTrue = () => {
     return true;
 };
 
-const returnFalse = function() {
+const returnFalse = () => {
     return false;
 };
 
@@ -16,27 +16,24 @@ class Event {
     constructor(target, type, args) {
         Object.defineProperties(this, {
             'target': {
-                get       : function() {
+                get       : () => {
                     return target;
                 },
-                set       : function(value) {
-                },
+                set       : () => {},
                 enumerable: true
             },
             'type'  : {
-                get       : function() {
+                get       : () => {
                     return type;
                 },
-                set       : function(value) {
-                },
+                set       : () => {},
                 enumerable: true
             },
             'args'  : {
-                get       : function() {
+                get       : () => {
                     return args;
                 },
-                set       : function(value) {
-                },
+                set       : () => {},
                 enumerable: true
             }
         });
