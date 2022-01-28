@@ -1,4 +1,5 @@
-# uEvent
+uEvent
+------
 
 [![npm version](https://img.shields.io/npm/v/uevent.svg?style=flat-square)](https://www.npmjs.com/package/uevent)
 [![jsDelivr CDN](https://data.jsdelivr.com/v1/package/npm/uevent/badge)](https://www.jsdelivr.com/package/npm/uevent)
@@ -11,7 +12,7 @@ It works on node.js and browser and also supports RequireJS (AMD).
 It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/microevent.js) with the changes of few other forks and custom changes.
 
 
-## Features
+# Features
 
 * jQuery-like API (`on`, `off`, `once`, `trigger`)
 * Value modifier support
@@ -19,16 +20,16 @@ It is a fork of [jeromeetienne/microevents.js](https://github.com/jeromeetienne/
 * [handleEvent](https://developer.mozilla.org/en/docs/Web/API/EventListener#handleEvent()) support
 
 
-## Installation
+# Installation
 
 ```
 $ npm install uevent
 ```
 
 
-## Usage
+# Usage
 
-### Create an emitter
+## Create an emitter
 
 **Direct**
 
@@ -58,30 +59,8 @@ const obj = {};
 eventEmitterMixin(obj);
 ```
 
-### Callback signature
 
-The first parameter of the callback is always an `Event` object having the following properties :
-
-- `type` the name of the event
-- `target` the source object of the event
-- `args` additional parameters
-
-When additional parameters are provided they are passed to the callback :
-
-```js
-const callback = function(event, param1, param2) {};
-```
-
-When using the `handleEvent` feature you only get the event object :
-
-```js
-const listener = {
-    handleEvent: function(event) {}
-};
-```
-
-
-## API
+## Register event handlers
 
 ### `on`
 
@@ -130,6 +109,30 @@ obj.off();
 Same as `on` but the callbacks will be removed after the first invocation.
 
 The callbacks attached once are **only** called by `trigger` and **not** by `change`.
+
+### Callback signature
+
+The first parameter of the callback is always an `Event` object having the following properties :
+
+- `type` the name of the event
+- `target` the source object of the event
+- `args` additional parameters
+
+When additional parameters are provided they are passed to the callback :
+
+```js
+const callback = function(event, param1, param2) {};
+```
+
+When using the `handleEvent` feature you only get the event object :
+
+```js
+const listener = {
+    handleEvent: function(event) {}
+};
+```
+
+## Trigger events
 
 ### `trigger`
 
@@ -197,5 +200,5 @@ const newVal = obj.change('event', '1234');
 ```
 
 
-## License
+# License
 This library is available under the MIT license.

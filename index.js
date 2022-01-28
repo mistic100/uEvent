@@ -1,4 +1,5 @@
 const EventEmitter = require('./src/EventEmitter');
+const Event = require('./src/Event');
 
 function mixin(target) {
     target = typeof target === 'function' ? target.prototype : target;
@@ -12,5 +13,6 @@ function mixin(target) {
 
 module.exports = {
     EventEmitter: EventEmitter,
+    Event       : Event,
     mixin       : mixin,
 };

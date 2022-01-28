@@ -12,7 +12,7 @@ describe('Adding methods', () => {
     });
 
     it('add methods to prototype', () => {
-        const Clazz = function() {
+        const Clazz = function () {
         };
         uevent.mixin(Clazz);
 
@@ -23,7 +23,7 @@ describe('Adding methods', () => {
     });
 
     it('extends EventEmitter', () => {
-        const Clazz = function() {
+        const Clazz = function () {
         };
         Clazz.prototype = new uevent.EventEmitter();
         Clazz.prototype.constructor = Clazz;
@@ -53,7 +53,7 @@ describe('Basic usage', () => {
         const obj = new uevent.EventEmitter();
 
         let done = null;
-        obj.on('test', function(e, a, b) {
+        obj.on('test', function (e, a, b) {
             done = [a, b];
         });
         obj.trigger('test', 'foo', 'bar');
@@ -93,10 +93,10 @@ describe('Basic usage', () => {
     it('change', () => {
         const obj = new uevent.EventEmitter();
 
-        obj.on('test', function(e, v) {
+        obj.on('test', function (e, v) {
             return v + 1;
         });
-        obj.on('test', function(e, v) {
+        obj.on('test', function (e, v) {
             return v + 1;
         });
         let done = obj.change('test', 0);
@@ -107,7 +107,7 @@ describe('Basic usage', () => {
     it('change + once', () => {
         const obj = new uevent.EventEmitter();
 
-        obj.once('test', function(e, v) {
+        obj.once('test', function (e, v) {
             return v + 1;
         });
         let done = obj.change('test', 0);
@@ -131,7 +131,7 @@ describe('Basic usage', () => {
 
 describe('Separated instances', () => {
     it('different instances should not share events', () => {
-        const Clazz = function() {
+        const Clazz = function () {
         };
         uevent.mixin(Clazz);
 
@@ -225,7 +225,7 @@ describe('Advanced', () => {
 
         let done = 0;
 
-        obj.on('test', function(e) {
+        obj.on('test', function (e) {
             done++;
             e.stopPropagation();
         });
@@ -245,7 +245,7 @@ describe('Advanced', () => {
 
         let done = 0;
 
-        obj.once('test', function(e) {
+        obj.once('test', function (e) {
             done++;
             e.stopPropagation();
         });
@@ -264,12 +264,12 @@ describe('Advanced', () => {
     it('stop propagation in change', () => {
         const obj = new uevent.EventEmitter();
 
-        obj.on('test', function(e, v) {
+        obj.on('test', function (e, v) {
             e.stopPropagation();
             return v + 1;
         });
         obj.on({
-            test: function(e, v) {
+            test: function (e, v) {
                 return v + 1;
             }
         });
@@ -282,7 +282,7 @@ describe('Advanced', () => {
     it('prevent default', () => {
         const obj = new uevent.EventEmitter();
 
-        obj.on('test', function(e) {
+        obj.on('test', function (e) {
             e.preventDefault();
         });
         const e = obj.trigger('test');
@@ -295,7 +295,7 @@ describe('Advanced', () => {
 
         const listener = {
             done       : 0,
-            handleEvent: function(e) {
+            handleEvent: function (e) {
                 if (e.type === 'test' && e.args[0] === 'foo') {
                     this.done++;
                 }
@@ -305,5 +305,18 @@ describe('Advanced', () => {
         obj.trigger('test', 'foo');
 
         assert.strictEqual(listener.done, 1);
+    });
+});
+
+describe('Event instance', () => {
+    it('returns an Event instance', () => {
+        const obj = new uevent.EventEmitter();
+
+        let internalOk = false;
+        obj.on('test', e => internalOk = e instanceof uevent.Event);
+        const e = obj.trigger('test');
+
+        assert.ok(e instanceof uevent.Event);
+        assert.ok(internalOk);
     });
 });

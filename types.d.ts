@@ -53,6 +53,7 @@ declare const uevent: {
     EventEmitter: {
         new(): uevent.EventEmitter;
     };
+    Event: Event,
     mixin: <T>(target: T) => T;
 };
 export = uevent;
