@@ -1,5 +1,5 @@
 /*!
- * uevent (v2.1.0)
+ * uevent (v2.1.1)
  * @copyright 2015-2022 Damien "Mistic" Sorel <contact@git.strangeplanet.fr>
  * @licence MIT
  */
@@ -88,32 +88,20 @@
        * @param {Function} [callback]
        * @return {this}
        */
-      _proto.on = function on(events, callback, once) {
+      _proto.on = function on(events, callback) {
         var _this = this;
-
-        if (once === void 0) {
-          once = false;
-        }
 
         this.__events = this.__events || {};
 
         if (typeof events === 'object') {
           for (var event in events) {
             if (events.hasOwnProperty(event)) {
-              if (once) {
-                events[event].__once = true;
-              }
-
               this.__events[event] = this.__events[event] || [];
 
               this.__events[event].push(events[event]);
             }
           }
         } else {
-          if (once) {
-            callback.__once = true;
-          }
-
           events.split(' ').forEach(function (event) {
             _this.__events[event] = _this.__events[event] || [];
 
@@ -186,7 +174,27 @@
       ;
 
       _proto.once = function once(events, callback) {
-        return this.on(events, callback, true);
+        var _this3 = this;
+
+        this.__once = this.__once || {};
+
+        if (typeof events === 'object') {
+          for (var event in events) {
+            if (events.hasOwnProperty(event)) {
+              this.__once[event] = this.__once[event] || [];
+
+              this.__once[event].push(events[event]);
+            }
+          }
+        } else {
+          events.split(' ').forEach(function (event) {
+            _this3.__once[event] = _this3.__once[event] || [];
+
+            _this3.__once[event].push(callback);
+          });
+        }
+
+        return this;
       }
       /**
        * Trigger all handlers for an event
@@ -204,14 +212,8 @@
         var e = new Event_1(this, event, args);
 
         if (this.__events && event in this.__events) {
-          var hasOnce = false;
-
           for (var i = 0, l = this.__events[event].length; i < l; i++) {
             var f = this.__events[event][i];
-
-            if (f.__once) {
-              hasOnce = true;
-            }
 
             if (typeof f === 'object') {
               f.handleEvent(e);
@@ -223,12 +225,24 @@
               break;
             }
           }
+        }
 
-          if (hasOnce) {
-            this.__events[event] = this.__events[event].filter(function (f) {
-              return !f.__once;
-            });
+        if (this.__once && event in this.__once) {
+          for (var _i = 0, _l = this.__once[event].length; _i < _l; _i++) {
+            var _f = this.__once[event][_i];
+
+            if (typeof _f === 'object') {
+              _f.handleEvent(e);
+            } else {
+              _f.call.apply(_f, [this, e].concat(args));
+            }
+
+            if (e.isPropagationStopped()) {
+              break;
+            }
           }
+
+          delete this.__once[event];
         }
 
         return e;
@@ -253,10 +267,6 @@
         if (this.__events && event in this.__events) {
           for (var i = 0, l = this.__events[event].length; i < l; i++) {
             var f = this.__events[event][i];
-
-            if (f.__once) {
-              continue;
-            }
 
             if (typeof f === 'object') {
               e.value = f.handleEvent(e);
