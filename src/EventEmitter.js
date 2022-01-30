@@ -19,24 +19,18 @@ class EventEmitter {
      * @param {Function} [callback]
      * @return {this}
      */
-    on(events, callback, once = false) {
+    on(events, callback) {
         this.__events = this.__events || {};
 
         if (typeof events === 'object') {
             for (const event in events) {
                 if (events.hasOwnProperty(event)) {
-                    if (once) {
-                        events[event].__once = true;
-                    }
                     this.__events[event] = this.__events[event] || [];
                     this.__events[event].push(events[event]);
                 }
             }
         }
         else {
-            if (once) {
-                callback.__once = true;
-            }
             events.split(' ').forEach((event) => {
                 this.__events[event] = this.__events[event] || [];
                 this.__events[event].push(callback);
@@ -105,7 +99,24 @@ class EventEmitter {
      * @return {this}
      */
     once(events, callback) {
-        return this.on(events, callback, true);
+        this.__once = this.__once || {};
+
+        if (typeof events === 'object') {
+            for (const event in events) {
+                if (events.hasOwnProperty(event)) {
+                    this.__once[event] = this.__once[event] || [];
+                    this.__once[event].push(events[event]);
+                }
+            }
+        }
+        else {
+            events.split(' ').forEach((event) => {
+                this.__once[event] = this.__once[event] || [];
+                this.__once[event].push(callback);
+            });
+        }
+
+        return this;
     }
 
     /**
@@ -120,12 +131,8 @@ class EventEmitter {
         const e = new Event(this, event, args);
 
         if (this.__events && event in this.__events) {
-            let hasOnce = false;
             for (let i = 0, l = this.__events[event].length; i < l; i++) {
-                let f = this.__events[event][i];
-                if (f.__once) {
-                    hasOnce = true;
-                }
+                const f = this.__events[event][i];
                 if (typeof f === 'object') {
                     f.handleEvent(e);
                 }
@@ -136,9 +143,22 @@ class EventEmitter {
                     break;
                 }
             }
-            if (hasOnce) {
-                this.__events[event] = this.__events[event].filter(f => !f.__once);
+        }
+
+        if (this.__once && event in this.__once) {
+            for (let i = 0, l = this.__once[event].length; i < l; i++) {
+                const f = this.__once[event][i];
+                if (typeof f === 'object') {
+                    f.handleEvent(e);
+                }
+                else {
+                    f.call(this, e, ...args);
+                }
+                if (e.isPropagationStopped()) {
+                    break;
+                }
             }
+            delete this.__once[event];
         }
 
         return e;
@@ -160,9 +180,6 @@ class EventEmitter {
         if (this.__events && event in this.__events) {
             for (let i = 0, l = this.__events[event].length; i < l; i++) {
                 const f = this.__events[event][i];
-                if (f.__once) {
-                    continue;
-                }
                 if (typeof f === 'object') {
                     e.value = f.handleEvent(e);
                 }
