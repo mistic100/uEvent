@@ -1,5 +1,5 @@
 /*!
- * uevent (v2.1.1)
+ * uevent (v2.2.0)
  * @copyright 2015-2022 Damien "Mistic" Sorel <contact@git.strangeplanet.fr>
  * @licence MIT
  */
@@ -130,30 +130,47 @@
       _proto.off = function off(events, callback) {
         var _this2 = this;
 
-        this.__events = this.__events || {};
-
         if (typeof events === 'object') {
           for (var event in events) {
-            if (events.hasOwnProperty(event) && event in this.__events) {
-              var index = this.__events[event].indexOf(events[event]);
+            if (events.hasOwnProperty(event)) {
+              if (this.__events && event in this.__events) {
+                var index = this.__events[event].indexOf(events[event]);
 
-              if (index !== -1) this.__events[event].splice(index, 1);
+                if (index !== -1) this.__events[event].splice(index, 1);
+              }
+
+              if (this.__once && event in this.__once) {
+                var _index = this.__once[event].indexOf(events[event]);
+
+                if (_index !== -1) this.__once[event].splice(_index, 1);
+              }
             }
           }
         } else if (!!events) {
           events.split(' ').forEach(function (event) {
-            if (event in _this2.__events) {
+            if (_this2.__events && event in _this2.__events) {
               if (callback) {
-                var _index = _this2.__events[event].indexOf(callback);
+                var _index2 = _this2.__events[event].indexOf(callback);
 
-                if (_index !== -1) _this2.__events[event].splice(_index, 1);
+                if (_index2 !== -1) _this2.__events[event].splice(_index2, 1);
               } else {
                 _this2.__events[event].length = 0;
+              }
+            }
+
+            if (_this2.__once && event in _this2.__once) {
+              if (callback) {
+                var _index3 = _this2.__once[event].indexOf(callback);
+
+                if (_index3 !== -1) _this2.__once[event].splice(_index3, 1);
+              } else {
+                _this2.__once[event].length = 0;
               }
             }
           });
         } else {
           this.__events = {};
+          this.__once = {};
         }
 
         return this;
