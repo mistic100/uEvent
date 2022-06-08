@@ -55,19 +55,23 @@ class EventEmitter {
      * @return {this}
      */
     off(events, callback) {
-        this.__events = this.__events || {};
-
         if (typeof events === 'object') {
             for (const event in events) {
-                if (events.hasOwnProperty(event) && (event in this.__events)) {
-                    const index = this.__events[event].indexOf(events[event]);
-                    if (index !== -1) this.__events[event].splice(index, 1);
+                if (events.hasOwnProperty(event)) {
+                    if (this.__events && (event in this.__events)) {
+                        const index = this.__events[event].indexOf(events[event]);
+                        if (index !== -1) this.__events[event].splice(index, 1);
+                    }
+                    if (this.__once && (event in this.__once)) {
+                        const index = this.__once[event].indexOf(events[event]);
+                        if (index !== -1) this.__once[event].splice(index, 1);
+                    }
                 }
             }
         }
         else if (!!events) {
             events.split(' ').forEach((event) => {
-                if (event in this.__events) {
+                if (this.__events && (event in this.__events)) {
                     if (callback) {
                         const index = this.__events[event].indexOf(callback);
                         if (index !== -1) this.__events[event].splice(index, 1);
@@ -76,10 +80,20 @@ class EventEmitter {
                         this.__events[event].length = 0;
                     }
                 }
+                if (this.__once && (event in this.__once)) {
+                    if (callback) {
+                        const index = this.__once[event].indexOf(callback);
+                        if (index !== -1) this.__once[event].splice(index, 1);
+                    }
+                    else {
+                        this.__once[event].length = 0;
+                    }
+                }
             });
         }
         else {
             this.__events = {};
+            this.__once = {};
         }
 
         return this;
@@ -130,7 +144,7 @@ class EventEmitter {
         const args = Array.prototype.slice.call(arguments, 1);
         const e = new Event(this, event, args);
 
-        if (this.__events && event in this.__events) {
+        if (this.__events && (event in this.__events)) {
             for (let i = 0, l = this.__events[event].length; i < l; i++) {
                 const f = this.__events[event][i];
                 if (typeof f === 'object') {
@@ -145,7 +159,7 @@ class EventEmitter {
             }
         }
 
-        if (this.__once && event in this.__once) {
+        if (this.__once && (event in this.__once)) {
             for (let i = 0, l = this.__once[event].length; i < l; i++) {
                 const f = this.__once[event][i];
                 if (typeof f === 'object') {
