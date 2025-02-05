@@ -1,14 +1,12 @@
 {
   "name": "uevent",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Event emitter micro library",
+  "type": "module",
   "main": "index.js",
-  "browser": "browser.js",
   "types": "types.d.ts",
   "files": [
-    "src/",
-    "browser.js",
-    "browser.js.map",
+    "index.js",
     "types.d.ts"
   ],
   "author": {
@@ -30,15 +28,9 @@
     "url": "https://github.com/mistic100/uEvent/issues"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.12",
-    "@babel/preset-env": "^7.16.11",
-    "mocha": "^11.0.1",
-    "rollup": "^2.66.1",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0"
+    "mocha": "^11.1.0"
   },
   "scripts": {
-    "test": "mocha tests/*",
-    "compile": "rollup --config rollup.config.js"
+    "test": "mocha tests/*"
   }
 }

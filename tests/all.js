@@ -1,10 +1,10 @@
-const uevent = require('../index');
-const assert = require('assert');
+import { mixin, EventEmitter, Event } from '../index.js';
+import assert from 'assert';
 
 describe('Adding methods', () => {
     it('add methods to object', () => {
         const obj = {};
-        const res = uevent.mixin(obj);
+        const res = mixin(obj);
 
         assert.ok('on' in obj);
         assert.ok('trigger' in obj);
@@ -14,7 +14,7 @@ describe('Adding methods', () => {
     it('add methods to prototype', () => {
         const Clazz = function () {
         };
-        uevent.mixin(Clazz);
+        mixin(Clazz);
 
         const obj = new Clazz();
 
@@ -25,7 +25,7 @@ describe('Adding methods', () => {
     it('extends EventEmitter', () => {
         const Clazz = function () {
         };
-        Clazz.prototype = new uevent.EventEmitter();
+        Clazz.prototype = new EventEmitter();
         Clazz.prototype.constructor = Clazz;
 
         const obj = new Clazz();
@@ -37,7 +37,7 @@ describe('Adding methods', () => {
 
 describe('Basic usage', () => {
     it('trigger', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let done = 0;
         obj.on('test', () => {
@@ -50,7 +50,7 @@ describe('Basic usage', () => {
     });
 
     it('trigger w. parameters', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let done = null;
         obj.on('test', function (e, a, b) {
@@ -62,7 +62,7 @@ describe('Basic usage', () => {
     });
 
     it('once', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let done = 0;
         obj.once('test', () => {
@@ -75,7 +75,7 @@ describe('Basic usage', () => {
     });
 
     it('trigger + once', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let done = 0;
         obj.once('test', () => {
@@ -91,7 +91,7 @@ describe('Basic usage', () => {
     });
 
     it('change', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         obj.on('test', function (e, v) {
             return v + 1;
@@ -105,7 +105,7 @@ describe('Basic usage', () => {
     });
 
     it('change + once', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         obj.once('test', function (e, v) {
             return v + 1;
@@ -116,7 +116,7 @@ describe('Basic usage', () => {
     });
 
     it('off', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let done = 0;
         obj.on('test', () => {
@@ -133,7 +133,7 @@ describe('Separated instances', () => {
     it('different instances should not share events', () => {
         const Clazz = function () {
         };
-        uevent.mixin(Clazz);
+        mixin(Clazz);
 
         const obj1 = new Clazz();
         const obj2 = new Clazz();
@@ -151,7 +151,7 @@ describe('Separated instances', () => {
 
 describe('Multiple events', () => {
     it('on', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let done = 0;
 
@@ -177,7 +177,7 @@ describe('Multiple events', () => {
     });
 
     it('off', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let done = 0;
         const cb1 = () => {
@@ -221,7 +221,7 @@ describe('Multiple events', () => {
 
 describe('Advanced', () => {
     it('stop propagation in trigger', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let done = 0;
 
@@ -241,7 +241,7 @@ describe('Advanced', () => {
     });
 
     it('stop propagation in once', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let done = 0;
 
@@ -262,7 +262,7 @@ describe('Advanced', () => {
     });
 
     it('stop propagation in change', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         obj.on('test', function (e, v) {
             e.stopPropagation();
@@ -280,7 +280,7 @@ describe('Advanced', () => {
     });
 
     it('prevent default', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         obj.on('test', function (e) {
             e.preventDefault();
@@ -291,7 +291,7 @@ describe('Advanced', () => {
     });
 
     it('use handleEvent', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         const listener = {
             done       : 0,
@@ -310,13 +310,13 @@ describe('Advanced', () => {
 
 describe('Event instance', () => {
     it('returns an Event instance', () => {
-        const obj = new uevent.EventEmitter();
+        const obj = new EventEmitter();
 
         let internalOk = false;
-        obj.on('test', e => internalOk = e instanceof uevent.Event);
+        obj.on('test', e => internalOk = e instanceof Event);
         const e = obj.trigger('test');
 
-        assert.ok(e instanceof uevent.Event);
+        assert.ok(e instanceof Event);
         assert.ok(internalOk);
     });
 });
